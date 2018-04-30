@@ -18,7 +18,7 @@ namespace CodeChallenge.JobLogger.Core
            if (configuration.LogToConsole)
                _sinks.Add(new ColoredConsoleSink(timeProvider));
            if (configuration.LogToDb)
-               _sinks.Add(new DbStorageSink());
+               _sinks.Add(new DbStorageSink(configuration.ConnectionString));
         }
 
         void ILoggeable.Log(LogLevel level, string message)

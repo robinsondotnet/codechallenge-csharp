@@ -3,6 +3,7 @@
     public interface ITimeProvider
     {
         string AppendTime(string message);
+
         string GetShortDate();
     }
 }

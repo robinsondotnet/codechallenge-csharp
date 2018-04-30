@@ -1,6 +1,7 @@
 ﻿namespace CodeChallenge.Infrastructure
 {
-    public interface IRepository
+    public interface IRepository<in TEntity> where TEntity : class
     {
+        void Insert(TEntity entity);
     }
 }

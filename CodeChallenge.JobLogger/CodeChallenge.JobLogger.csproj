@@ -54,6 +54,14 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\CodeChallenge.Data.Entities\CodeChallenge.Data.Model.csproj">
+      <Project>{79973835-95B5-410D-A18D-EE269CC98ECD}</Project>
+      <Name>CodeChallenge.Data.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CodeChallenge.Data\CodeChallenge.Data.Sql.csproj">
+      <Project>{639C61A2-D1CA-4C21-A343-FF18594315DA}</Project>
+      <Name>CodeChallenge.Data.Sql</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CodeChallenge.Infrastructure\CodeChallenge.Infrastructure.csproj">
       <Project>{3350580D-BE8F-4F8E-A87F-C7CAB435C35A}</Project>
       <Name>CodeChallenge.Infrastructure</Name>
