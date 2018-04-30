@@ -2,6 +2,6 @@
 {
     public static class Constants
     {
-        public const string DefaultFilePath = "C:/JobLoggerLogs/";
+        public const string DefaultFilePath = "C:/JobLoggerLogs";
     }
 }

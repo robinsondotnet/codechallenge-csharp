@@ -1,33 +1,25 @@
-﻿using System;
-using CodeChallenge.Infrastructure;
-
-namespace CodeChallenge.JobLogger.Sinks
+﻿namespace CodeChallenge.JobLogger.Sinks
 {
-    public class DbStorageSink : ILoggeable
+    public class DbStorageSink : LogSink
     {
-        void ILoggeable.Log(LogLevel leve, string message)
+        public override void LogWarning(string message)
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
-        void ILoggeable.LogWarning(string message)
+        public override void LogError(string message)
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
-        void ILoggeable.LogError(string message)
+        public override void LogMessage(string message)
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
-        void ILoggeable.LogMessage(string message)
+        public override void LogDebug(string message)
         {
-            throw new NotImplementedException();
-        }
-
-        void ILoggeable.LogDebug(string message)
-        {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
     }
 }

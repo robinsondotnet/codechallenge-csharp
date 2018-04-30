@@ -1,33 +1,40 @@
 ﻿using System;
+using System.IO;
 using CodeChallenge.Infrastructure;
+using CodeChallenge.JobLogger.Core;
 
 namespace CodeChallenge.JobLogger.Sinks
 {
-    public class LogFileSink : ILoggeable
+    public class LogFileSink : LogSink
     {
-        void ILoggeable.Log(LogLevel level, string message)
+        private readonly string _storagePath;
+        private readonly ITimeProvider _timeProvider;
+
+        public LogFileSink(ITimeProvider timeProvider, string storagePath)
         {
-            throw new NotImplementedException();
+            _timeProvider = timeProvider;
+            _storagePath = $"{storagePath ?? Constants.DefaultFilePath}/JobLogger{_timeProvider.GetShortDate()}.txt";
         }
 
-        void ILoggeable.LogWarning(string message)
+        private void WriteToFile(string message)
         {
-            throw new NotImplementedException();
+            if (!File.Exists(_storagePath))
+                File.Create(_storagePath);
+
+            using (StreamWriter sw = File.AppendText(_storagePath))
+                sw.Write(_timeProvider.AppendTime(message));
         }
 
-        void ILoggeable.LogError(string message)
-        {
-            throw new NotImplementedException();
-        }
+        public override void LogWarning(string message)
+            => WriteToFile($" [WARNING] {message}");
 
-        void ILoggeable.LogMessage(string message)
-        {
-            throw new NotImplementedException();
-        }
+        public override void LogError(string message)
+            => WriteToFile($" [ERROR] {message}");
 
-        void ILoggeable.LogDebug(string message)
-        {
-            throw new NotImplementedException();
-        }
+        public override void LogMessage(string message)
+            => WriteToFile($" [MESSAGE] {message}");
+
+        public override void LogDebug(string message)
+            => WriteToFile($" [DEBUG] {message}");
     }
 }
