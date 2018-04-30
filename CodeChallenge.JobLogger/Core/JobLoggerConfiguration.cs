@@ -10,11 +10,14 @@ namespace CodeChallenge.JobLogger.Core
 
         public bool LogToConsole { get; set; }
 
+        public string StoragePath { get; set; }
+
         public JobLoggerConfiguration(NameValueConfigurationCollection appSettingsCollection)
         {
             LogToDb = TryGet(appSettingsCollection, "LogToDB");
             LogToFile = TryGet(appSettingsCollection, "LogToFile");
             LogToConsole = TryGet(appSettingsCollection, "LogToConsole");
+            StoragePath = appSettingsCollection["JobLogger:StoragePath"]?.Value;
             
             if (!LogToDb && !LogToConsole && !LogToFile)
                 throw new ConfigurationErrorsException("Invalid Configuration. You should choose at least one destination to log");

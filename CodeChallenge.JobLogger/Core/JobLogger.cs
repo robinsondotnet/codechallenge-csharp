@@ -12,10 +12,11 @@ namespace CodeChallenge.JobLogger.Core
 
         public JobLogger(JobLoggerConfiguration configuration)
         {
+            var timeProvider = new TimeProvider(TimeZoneInfo.Utc);
            if (configuration.LogToFile) 
-               _sinks.Add(new LogFileSink());
+               _sinks.Add(new LogFileSink(timeProvider, configuration.StoragePath));
            if (configuration.LogToConsole)
-               _sinks.Add(new ColoredConsoleSink());
+               _sinks.Add(new ColoredConsoleSink(timeProvider));
            if (configuration.LogToDb)
                _sinks.Add(new DbStorageSink());
         }

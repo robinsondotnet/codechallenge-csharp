@@ -45,6 +45,7 @@
     <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\JobLogger.cs" />
     <Compile Include="Core\JobLoggerConfiguration.cs" />
+    <Compile Include="Core\TimeProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sinks\ColoredConsoleSink.cs" />
     <Compile Include="Sinks\LogFileSink.cs" />
