@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -41,8 +42,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JobLogger.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Core\JobLogger.cs" />
+    <Compile Include="Core\JobLoggerConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sinks\ColoredConsoleSink.cs" />
+    <Compile Include="Sinks\LogFileSink.cs" />
+    <Compile Include="Sinks\DbStorageSink.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CodeChallenge.Infrastructure\CodeChallenge.Infrastructure.csproj">
+      <Project>{3350580D-BE8F-4F8E-A87F-C7CAB435C35A}</Project>
+      <Name>CodeChallenge.Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
