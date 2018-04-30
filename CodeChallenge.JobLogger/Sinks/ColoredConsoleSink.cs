@@ -3,31 +3,31 @@ using CodeChallenge.Infrastructure;
 
 namespace CodeChallenge.JobLogger.Sinks
 {
-    public class ColoredConsoleSink : ILoggeable
+    public class ColoredConsoleSink : LogSink
     {
-        void ILoggeable.Log(LogLevel level, string message)
+        private readonly ITimeProvider _timeProvider;
+
+        public ColoredConsoleSink(ITimeProvider timeProvider)
         {
-            throw new NotImplementedException();
+            _timeProvider = timeProvider;
         }
 
-        void ILoggeable.LogWarning(string message)
-        {
-            throw new NotImplementedException();
-        }
+        public override void LogWarning(string message)
+            => WriteConsole(ConsoleColor.Yellow, message);
 
-        void ILoggeable.LogError(string message)
-        {
-            throw new NotImplementedException();
-        }
+        public override void LogError(string message)
+            => WriteConsole(ConsoleColor.Red, message);
 
-        void ILoggeable.LogMessage(string message)
-        {
-            throw new NotImplementedException();
-        }
+        public override void LogMessage(string message)
+            => WriteConsole(ConsoleColor.White, message);
 
-        void ILoggeable.LogDebug(string message)
+        public override void LogDebug(string message)
+            => WriteConsole(ConsoleColor.Gray, message);
+
+        private void WriteConsole(ConsoleColor color, string message)
         {
-            throw new NotImplementedException();
+            Console.ForegroundColor = color;
+            Console.WriteLine(_timeProvider.AppendTime(message));
         }
     }
 }

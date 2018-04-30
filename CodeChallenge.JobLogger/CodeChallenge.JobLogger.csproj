@@ -49,6 +49,7 @@
     <Compile Include="Sinks\ColoredConsoleSink.cs" />
     <Compile Include="Sinks\LogFileSink.cs" />
     <Compile Include="Sinks\DbStorageSink.cs" />
+    <Compile Include="Sinks\LogSink.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
