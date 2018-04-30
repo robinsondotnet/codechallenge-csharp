@@ -1,12 +1,7 @@
-﻿using Xunit;
-
-namespace CodeChallenge.UnitTests
+﻿namespace CodeChallenge.UnitTests.JobLogger
 {
     public class JobLoggerTests
     {
-        [Fact]
-        public void TestMethod1()
-        {
-        }
+        //TODO: Write UnitTests
     }
 }

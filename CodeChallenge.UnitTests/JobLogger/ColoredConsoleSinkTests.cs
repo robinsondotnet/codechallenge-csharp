@@ -4,6 +4,6 @@ namespace CodeChallenge.UnitTests.JobLogger
 {
     public class ColoredConsoleSinkTests
     {
-        // TODO
+        // TODO: Write UnitTests
     }
 }
