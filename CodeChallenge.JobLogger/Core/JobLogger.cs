@@ -1,138 +1,72 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using CodeChallenge.Infrastructure;
+using CodeChallenge.JobLogger.Sinks;
 
 namespace CodeChallenge.JobLogger.Core
 {
     public class JobLogger : ILoggeable, ISanitizable
     {
+        private readonly ICollection<ILoggeable> _sinks = new Collection<ILoggeable>();
         public JobLogger(JobLoggerConfiguration configuration)
         {
-            
+           if (configuration.LogToFile) 
+               _sinks.Add(new LogFileSink());
+           if (configuration.LogToConsole)
+               _sinks.Add(new ColoredConsoleSink());
+           if (configuration.LogToDb)
+               _sinks.Add(new DbStorageSink());
         }
 
-        private static bool _logToFile;
-        private static bool _logToConsole;
-        private static bool _logMessage;
-        private static bool _logWarning;
-        private static bool _logError;
-        private static bool LogToDatabase;
-
-        private bool _initialized;
-
-        public JobLogger(bool logToFile, bool logToConsole, bool logToDatabase, bool
-            logMessage, bool logWarning, bool logError)
+        void ILoggeable.Log(LogLevel level, string message)
         {
-            _logError = logError;
-            _logMessage = logMessage;
-            _logWarning = logWarning;
-            LogToDatabase = logToDatabase;
-            _logToFile = logToFile;
-            _logToConsole = logToConsole;
-        }
-
-        public static void LogMessage(string message, bool message, bool warning, bool error)
-        {
-            message.Trim();
-
-            if (message == null || message.Length == 0)
-            {
+            if (IsNotEmpty(message, out var parsedMessage))
                 return;
-            }
 
-            if (!_logToConsole && !_logToFile && !LogToDatabase)
+            switch (level)
             {
-                throw new Exception("Invalid configuration");
+                case LogLevel.Debug:
+                    LogInAllSinks(log => log.LogDebug(parsedMessage));
+                    break;
+                case LogLevel.Error:
+                    LogInAllSinks(log => log.LogError(parsedMessage));
+                    break;
+                case LogLevel.Warning:
+                    LogInAllSinks(log => log.LogWarning(parsedMessage));
+                    break;
+                case LogLevel.Message:
+                    LogInAllSinks(log => log.LogMessage(parsedMessage));
+                    break;
             }
-
-            if ((!_logError && !_logMessage && !_logWarning) || (!message && !warning && !error))
-            {
-                throw new Exception("Error or warning or Message must be specified");
-            }
-
-            System.Data.SqlClient.SqlConnection connection =
-                new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.AppSettings["ConnectionString"]);
-            connection.Open();
-
-            int t;
-
-            if (message && _logMessage)
-            {
-                t = 1;
-            }
-
-            if (error && _logError)
-            {
-                t = 2;
-            }
-
-            if (warning && _logWarning)
-            {
-                t = 3;
-            }
-
-            System.Data.SqlClient.SqlCommand command = new System.Data.SqlClient.SqlCommand("Insert into Log Values ('" + message + "', " +
-                                                                                            t.ToString() + ")");
-            command.ExecuteNonQuery();
-
-            string l;
-
-            if (!System.IO.File.Exists(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] 
-                                       + "LogFile" + DateTime.Now.ToShortDateString() + ".txt"))
-            {
-                l =
-                    System.IO.File.ReadAllText(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] 
-                                               + "LogFile" + DateTime.Now.ToShortDateString() + ".txt");
-            }
-            if (error && _logError)
-            {
-                l = l + DateTime.Now.ToShortDateString() + message;
-            }
-            if (warning && _logWarning)
-            {
-                l = l + DateTime.Now.ToShortDateString() + message;
-            }
-            if (message && _logMessage)
-            {
-                l = l + DateTime.Now.ToShortDateString() + message;
-            }
-
-            System.IO.File.WriteAllText(System.Configuration.ConfigurationManager.AppSettings[
-                                            "LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt", l);
-
-            if (error && _logError)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-            }
-            if (warning && _logWarning)
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-            }
-            if (message && _logMessage)
-            {
-                Console.ForegroundColor = ConsoleColor.White;
-            }
-
-            Console.WriteLine(DateTime.Now.ToShortDateString() + message);
-        }
-
-        void ILoggeable.Log(string message)
-        {
-            throw new NotImplementedException();
         }
 
         void ILoggeable.LogWarning(string message)
-        {
-            throw new NotImplementedException();
-        }
+            => ((ILoggeable) this).Log(LogLevel.Warning, message);
 
         void ILoggeable.LogError(string message)
-        {
-            throw new NotImplementedException();
-        }
+            => ((ILoggeable) this).Log(LogLevel.Error, message);
 
         void ILoggeable.LogMessage(string message)
+            => ((ILoggeable)this).Log(LogLevel.Message, message);
+
+        void ILoggeable.LogDebug(string message)
+            => ((ILoggeable)this).Log(LogLevel.Debug, message);
+
+        private void LogInAllSinks(Action<ILoggeable> action)
         {
-            throw new NotImplementedException();
+            foreach (var sink in _sinks)
+                action(sink);
+        }
+
+        public bool IsNotEmpty(string message, out string parsedMessage)
+        {
+            parsedMessage = string.Empty;
+            if (string.IsNullOrWhiteSpace(message))
+                return false;
+
+            parsedMessage = message.Trim();
+            return true;
         }
     }
 }

@@ -62,9 +62,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JobLoggerTests.cs" />
+    <Compile Include="JobLogger\ColoredConsoleSinkTests.cs" />
+    <Compile Include="JobLogger\DbStorageSinkTests.cs" />
+    <Compile Include="JobLogger\JobLoggerTests.cs" />
+    <Compile Include="JobLogger\LogFileSinkTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="JobLoggerConfigurationTests.cs" />
+    <Compile Include="JobLogger\JobLoggerConfigurationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

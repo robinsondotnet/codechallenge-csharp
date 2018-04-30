@@ -5,7 +5,7 @@ namespace CodeChallenge.JobLogger.Sinks
 {
     public class LogFileSink : ILoggeable
     {
-        void ILoggeable.Log(string message)
+        void ILoggeable.Log(LogLevel level, string message)
         {
             throw new NotImplementedException();
         }
@@ -21,6 +21,11 @@ namespace CodeChallenge.JobLogger.Sinks
         }
 
         void ILoggeable.LogMessage(string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ILoggeable.LogDebug(string message)
         {
             throw new NotImplementedException();
         }

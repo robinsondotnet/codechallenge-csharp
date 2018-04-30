@@ -2,12 +2,14 @@
 {
     public interface ILoggeable
     {
-        void Log(string message);
+        void Log(LogLevel level, string message);
 
         void LogWarning(string message);
 
         void LogError(string message);
 
         void LogMessage(string message);
+
+        void LogDebug(string message);
     }
 }
