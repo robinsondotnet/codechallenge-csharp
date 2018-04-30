@@ -24,10 +24,10 @@ namespace CodeChallenge.JobLogger.Core
         {
             var rawValue = collection[$"JobLogger:{keyName}"];
 
-            if (rawValue == null || string.IsNullOrWhiteSpace(rawValue.ToString()))
+            if (rawValue == null || string.IsNullOrWhiteSpace(rawValue.Value))
                 return false;
 
-            var canParse = bool.TryParse(rawValue.ToString(), out var result);
+            var canParse = bool.TryParse(rawValue.Value, out var result);
 
             return canParse && result;
         }
