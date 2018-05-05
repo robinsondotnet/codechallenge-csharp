@@ -18,7 +18,7 @@ namespace CodeChallenge.UnitTests.JobLogger
             Assert.True(loggerConfiguration.LogToFile); 
             Assert.False(loggerConfiguration.LogToConsole);
             Assert.False(loggerConfiguration.LogToDb);
-            Assert.Equal(LogLevel.Debug.ToString(), loggerConfiguration.LogLevel);
+            Assert.Equal(LogLevel.Debug, loggerConfiguration.LogLevel);
         }
 
         [Fact]

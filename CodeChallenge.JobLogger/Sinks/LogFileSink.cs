@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using CodeChallenge.Infrastructure;
-using CodeChallenge.JobLogger.Core;
 
 namespace CodeChallenge.JobLogger.Sinks
 {
@@ -12,7 +11,11 @@ namespace CodeChallenge.JobLogger.Sinks
         public LogFileSink(ITimeProvider timeProvider, string storagePath)
         {
             _timeProvider = timeProvider;
-            _storagePath = $"{storagePath ?? Constants.DefaultFilePath}/JobLogger{_timeProvider.GetShortDate()}.txt";
+
+            if (!Directory.Exists(storagePath))
+                throw new DirectoryNotFoundException();
+
+            _storagePath = $"{storagePath}/JobLogger{_timeProvider.GetShortDate()}.txt";
         }
 
         private void WriteToFile(string message)
