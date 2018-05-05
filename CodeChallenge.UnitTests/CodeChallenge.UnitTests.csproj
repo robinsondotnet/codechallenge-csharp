@@ -76,6 +76,10 @@
     <Analyzer Include="..\packages\xunit.analyzers.0.7.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CodeChallenge.Infrastructure\CodeChallenge.Infrastructure.csproj">
+      <Project>{3350580D-BE8F-4F8E-A87F-C7CAB435C35A}</Project>
+      <Name>CodeChallenge.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CodeChallenge.JobLogger\CodeChallenge.JobLogger.csproj">
       <Project>{1726FC8E-A3EB-4044-A139-01E1D257CCBF}</Project>
       <Name>CodeChallenge.JobLogger</Name>

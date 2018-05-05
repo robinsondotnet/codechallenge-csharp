@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using CodeChallenge.Infrastructure;
 using CodeChallenge.JobLogger.Core;
 using Xunit;
 
@@ -17,6 +18,7 @@ namespace CodeChallenge.UnitTests.JobLogger
             Assert.True(loggerConfiguration.LogToFile); 
             Assert.False(loggerConfiguration.LogToConsole);
             Assert.False(loggerConfiguration.LogToDb);
+            Assert.Equal(LogLevel.Debug.ToString(), loggerConfiguration.LogLevel);
         }
 
         [Fact]

@@ -14,6 +14,8 @@ namespace CodeChallenge.JobLogger.Core
 
         public string ConnectionString { get; set; }
 
+        public string LogLevel { get; set; } = Infrastructure.LogLevel.Debug.ToString();
+
         public JobLoggerConfiguration(NameValueConfigurationCollection appSettingsCollection)
         {
             LogToDb = TryGet(appSettingsCollection, "LogToDB");
@@ -21,6 +23,11 @@ namespace CodeChallenge.JobLogger.Core
             LogToConsole = TryGet(appSettingsCollection, "LogToConsole");
             StoragePath = appSettingsCollection["JobLogger:StoragePath"]?.Value;
             ConnectionString = appSettingsCollection["JobLogger:ConnectionString"]?.Value;
+
+            string logLevel;
+            if((logLevel = appSettingsCollection["JobLogger:LogLevel"]?.Value) != null)
+                LogLevel = logLevel;
+
             
             if (!LogToDb && !LogToConsole && !LogToFile)
                 throw new ConfigurationErrorsException("Invalid Configuration. You should choose at least one destination to log");

@@ -8,7 +8,7 @@ namespace CodeChallenge.JobLogger.Core
 {
     public class JobLogger : ILoggeable, ISanitizable
     {
-        private readonly ICollection<ILoggeable> _sinks = new Collection<ILoggeable>();
+        private readonly IList<ILoggeable> _sinks = new List<ILoggeable>();
 
         public JobLogger(JobLoggerConfiguration configuration)
         {
