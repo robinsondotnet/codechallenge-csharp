@@ -2,13 +2,14 @@
 {
     public enum LogLevel
     {
-        Debug = 0,
-
-        Error = 1,
-
-        Warning = 2,
 
         //TODO: What about Information instead of Message?
-        Message = 3,
+        Message = 0,
+
+        Warning = 1,
+
+        Error = 2,
+
+        Debug = 3
     }
 }
