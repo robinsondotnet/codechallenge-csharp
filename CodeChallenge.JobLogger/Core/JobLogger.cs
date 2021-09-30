@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using CodeChallenge.Infrastructure;
 using CodeChallenge.JobLogger.Sinks;
 
@@ -8,7 +7,9 @@ namespace CodeChallenge.JobLogger.Core
 {
     public class JobLogger : ILoggeable, ISanitizable
     {
-        private readonly ICollection<ILoggeable> _sinks = new Collection<ILoggeable>();
+        private readonly IList<ILoggeable> _sinks = new List<ILoggeable>();
+
+        private readonly LogLevel _minimumLogLevel;
 
         public JobLogger(JobLoggerConfiguration configuration)
         {
@@ -19,11 +20,13 @@ namespace CodeChallenge.JobLogger.Core
                _sinks.Add(new ColoredConsoleSink(timeProvider));
            if (configuration.LogToDb)
                _sinks.Add(new DbStorageSink(configuration.ConnectionString));
+
+            _minimumLogLevel = configuration.LogLevel;
         }
 
         void ILoggeable.Log(LogLevel level, string message)
         {
-            if (IsNotEmpty(message, out var parsedMessage))
+            if (IsNotEmpty(message, out var parsedMessage) && !IsLoggeable(level))
                 return;
 
             switch (level)
@@ -60,6 +63,9 @@ namespace CodeChallenge.JobLogger.Core
             foreach (var sink in _sinks)
                 action(sink);
         }
+
+        private bool IsLoggeable(LogLevel requested)
+            => requested >= _minimumLogLevel;
 
         public bool IsNotEmpty(string message, out string parsedMessage)
         {

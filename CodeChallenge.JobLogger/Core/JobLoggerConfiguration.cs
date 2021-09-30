@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using CodeChallenge.Infrastructure;
 
 namespace CodeChallenge.JobLogger.Core
 {
@@ -14,19 +16,24 @@ namespace CodeChallenge.JobLogger.Core
 
         public string ConnectionString { get; set; }
 
+        public LogLevel LogLevel { get; set; } = LogLevel.Debug;
+
         public JobLoggerConfiguration(NameValueConfigurationCollection appSettingsCollection)
         {
-            LogToDb = TryGet(appSettingsCollection, "LogToDB");
-            LogToFile = TryGet(appSettingsCollection, "LogToFile");
-            LogToConsole = TryGet(appSettingsCollection, "LogToConsole");
+            LogToDb = TryGetBoolean(appSettingsCollection, "LogToDB");
+            LogToFile = TryGetBoolean(appSettingsCollection, "LogToFile");
+            LogToConsole = TryGetBoolean(appSettingsCollection, "LogToConsole");
             StoragePath = appSettingsCollection["JobLogger:StoragePath"]?.Value;
             ConnectionString = appSettingsCollection["JobLogger:ConnectionString"]?.Value;
+
+            if(TryGetLogLevel(appSettingsCollection, out var logLevel))
+                LogLevel = logLevel;
             
             if (!LogToDb && !LogToConsole && !LogToFile)
                 throw new ConfigurationErrorsException("Invalid Configuration. You should choose at least one destination to log");
         }
 
-        private static bool TryGet(NameValueConfigurationCollection collection, string keyName)
+        private static bool TryGetBoolean(NameValueConfigurationCollection collection, string keyName)
         {
             var rawValue = collection[$"JobLogger:{keyName}"];
 
@@ -36,6 +43,20 @@ namespace CodeChallenge.JobLogger.Core
             var canParse = bool.TryParse(rawValue.Value, out var result);
 
             return canParse && result;
+        }
+
+        private static bool TryGetLogLevel(NameValueConfigurationCollection collection, out LogLevel logLevel)
+        {
+            var rawValue = collection["JobLogger:LogLevel"];
+
+            logLevel = LogLevel.Debug;
+
+            if (rawValue == null || string.IsNullOrWhiteSpace(rawValue.Value))
+                return false;
+
+            var canParse = Enum.TryParse(rawValue.Value, true, out logLevel);
+
+            return canParse;
         }
     }
 }

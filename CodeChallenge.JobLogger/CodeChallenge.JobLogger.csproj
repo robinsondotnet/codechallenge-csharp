@@ -42,7 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\JobLogger.cs" />
     <Compile Include="Core\JobLoggerConfiguration.cs" />
     <Compile Include="Core\TimeProvider.cs" />

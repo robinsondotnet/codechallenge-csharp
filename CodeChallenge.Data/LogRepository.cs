@@ -12,6 +12,10 @@ namespace CodeChallenge.Data.Sql
 
         public LogRepository(string connectionString)
         {
+            //TODO: Improve the way we check if the connectionString is valid
+            using (var con = new SqlConnection(connectionString))
+                con.Open();
+
             _connectionString = connectionString;
         }
 
